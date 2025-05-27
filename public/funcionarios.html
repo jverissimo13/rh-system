@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Funcionários</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 {
+      margin-bottom: 10px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, select, button {
+      padding: 8px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cadastro de Funcionários</h1>
+
+  <p>
+    <button onclick="logout()">Sair</button>
+  </p>
+
+  <h2>Filtrar Funcionários</h2>
+  <select id="filtro-cargo">
+    <option value="">Todos os Cargos</option>
+  </select>
+  <select id="filtro-departamento">
+    <option value="">Todos os Departamentos</option>
+  </select>
+
+  <form id="form-funcionario">
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <select id="cargo_id" required>
+      <option value="">Selecione um Cargo</option>
+    </select>
+    <select id="departamento_id" required>
+      <option value="">Selecione um Departamento</option>
+    </select>
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Cargo</th>
+        <th>Departamento</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="funcionarios-table-body"></tbody>
+  </table>
+
+  <script src="script.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>

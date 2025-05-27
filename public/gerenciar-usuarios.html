@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gerenciar Usuários</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    #form-editar {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerenciar Usuários</h1>
+  <p>
+    <button onclick="logout()">Sair</button>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="usuarios-tbody"></tbody>
+  </table>
+
+  <form id="form-editar">
+    <h3>Editar Usuário</h3>
+    <input type="hidden" id="edit-id" />
+    <input type="text" id="edit-nome" placeholder="Nome" required />
+    <input type="email" id="edit-email" placeholder="Email" required />
+    <input type="password" id="edit-senha" placeholder="Nova senha" />
+    <button type="submit">Salvar Alterações</button>
+    <button type="button" onclick="cancelarEdicao()">Cancelar</button>
+  </form>
+
+  <script>
+    const usuarioAtual = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (!usuarioAtual || usuarioAtual.email !== 'admin@empresa.com') {
+      alert('Acesso restrito.');
+      window.location.href = '/';
+    }
+
+    const tbody = document.getElementById('usuarios-tbody');
+    const form = document.getElementById('form-editar');
+
+    function carregarUsuarios() {
+      fetch('/usuarios', {
+        headers: { 'x-user-email': usuarioAtual.email }
+      })
+        .then(res => res.json())
+        .then(usuarios => {
+          tbody.innerHTML = '';
+          usuarios.forEach(user => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${user.nome}</td>
+              <td>${user.email}</td>
+              <td>
+                <button onclick="editarUsuario(${user.id}, '${user.nome}', '${user.email}')">Editar</button>
+                ${user.email !== 'admin@empresa.com' ? `<button onclick="excluirUsuario(${user.id})">Excluir</button>` : ''}
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+    }
+
+    function editarUsuario(id, nome, email) {
+      document.getElementById('edit-id').value = id;
+      document.getElementById('edit-nome').value = nome;
+      document.getElementById('edit-email').value = email;
+      form.style.display = 'block';
+    }
+
+    function cancelarEdicao() {
+      form.style.display = 'none';
+      form.reset();
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const id = document.getElementById('edit-id').value;
+      const nome = document.getElementById('edit-nome').value;
+      const email = document.getElementById('edit-email').value;
+      const senha = document.getElementById('edit-senha').value;
+
+      fetch(`/usuarios/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-email': usuarioAtual.email
+        },
+        body: JSON.stringify({ nome, email, senha })
+      })
+        .then(res => res.json())
+        .then(() => {
+          form.style.display = 'none';
+          form.reset();
+          carregarUsuarios();
+        });
+    });
+
+    function excluirUsuario(id) {
+      if (!confirm('Tem certeza que deseja excluir este usuário?')) return;
+
+      fetch(`/usuarios/${id}`, {
+        method: 'DELETE',
+        headers: { 'x-user-email': usuarioAtual.email }
+      })
+        .then(res => res.json())
+        .then(() => carregarUsuarios());
+    }
+
+    function logout() {
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = '/login.html';
+    }
+
+    carregarUsuarios();
+  </script>
+</body>
+</html>

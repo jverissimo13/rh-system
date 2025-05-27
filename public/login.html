@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin-bottom: 10px;
+      display: block;
+      width: 300px;
+      max-width: 100%;
+    }
+    #erro {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="senha" placeholder="Senha" required />
+    <button type="submit">Entrar</button>
+  </form>
+
+  <p id="erro"></p>
+
+  <script src="login.js"></script>
+</body>
+</html>

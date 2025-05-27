@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro de Usuário</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button {
+      display: block;
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 300px;
+      max-width: 100%;
+    }
+    #mensagem {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <script>
+      const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+        if (!usuario || usuario.email !== 'admin@empresa.com') {
+            alert('Acesso restrito a administradores.');
+            window.location.href = '/';
+        }
+    </script>
+
+    <h1>Cadastrar Novo Usuário</h1>
+
+  <form id="cadastro-form">
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="senha" placeholder="Senha" required />
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <p id="mensagem"></p>
+
+  <script>
+    document.getElementById('cadastro-form').addEventListener('submit', e => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      fetch('/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, email, senha })
+      })
+        .then(res => res.json())
+        .then(data => {
+          const msg = document.getElementById('mensagem');
+          if (data.success) {
+            msg.style.color = 'green';
+            msg.textContent = 'Usuário cadastrado com sucesso!';
+            document.getElementById('cadastro-form').reset();
+          } else {
+            msg.style.color = 'red';
+            msg.textContent = data.error || 'Erro ao cadastrar usuário.';
+          }
+        });
+    });
+  </script>
+</body>
+</html>

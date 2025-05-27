@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cargos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 8px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gerenciar Cargos</h1>
+
+  <p>
+    <button onclick="logout()">Sair</button>
+  </p>
+
+  <form id="form-cargo">
+    <input type="text" id="nome" name="nome" placeholder="Nome do Cargo" required />
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="cargos-table-body"></tbody>
+  </table>
+
+  <script src="cargos.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de RH</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    a {
+      text-decoration: none;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+    }
+    button {
+      padding: 8px 12px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Menu do Sistema de RH</h1>
+  <p id="boas-vindas"></p>
+
+  <ul>
+    <li><a href="/funcionarios.html">Gerenciar Funcionários</a></li>
+    <li><a href="/cargos.html">Gerenciar Cargos</a></li>
+    <li><a href="/departamentos.html">Gerenciar Departamentos</a></li>
+    <li id="link-cadastro-usuario" style="display: none;">
+      <a href="/cadastro-usuario.html">Cadastrar Usuário</a>
+    </li>
+    <li id="link-gerenciar-usuarios" style="display: none;">
+      <a href="/gerenciar-usuarios.html">Gerenciar Usuários</a>
+    </li>
+  </ul>
+
+  <button onclick="logout()">Sair</button>
+
+  <script>
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (!usuario) {
+      window.location.href = '/login.html';
+    } else {
+      document.getElementById('boas-vindas').textContent = `Bem-vindo, ${usuario.nome}`;
+      if (usuario.email === 'admin@empresa.com') {
+        document.getElementById('link-cadastro-usuario').style.display = 'list-item';
+        document.getElementById('link-gerenciar-usuarios').style.display = 'list-item';
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('usuarioLogado');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>
